@@ -1,0 +1,20 @@
+{
+  "name": "meal-orchestration-api",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "backend-api.js",
+  "scripts": {
+    "start": "node backend-api.js",
+    "dev": "node --watch backend-api.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "cors": "^2.8.5",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/cors": "^2.8.19",
+    "@types/uuid": "^10.0.0"
+  }
+}
