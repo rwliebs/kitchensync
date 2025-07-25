@@ -403,7 +403,7 @@ class TimelineGenerator {
 }
 
 // POST /meal - Create new meal timeline
-app.post('/meal', (req, res) => {
+app.post('/api/meals', (req, res) => {
   try {
     const mealRequest = req.body;
     
@@ -535,7 +535,7 @@ app.post('/meal', (req, res) => {
 });
 
 // GET /timeline/:id - Get current timeline state
-app.get('/timeline/:id', (req, res) => {
+app.get('/api/meals/:id', (req, res) => {
   try {
     const mealId = req.params.id;
     const meal = meals.get(mealId);
@@ -567,7 +567,7 @@ app.get('/timeline/:id', (req, res) => {
 });
 
 // PUT /task/:id/complete - Mark task as completed
-app.put('/task/:id/complete', (req, res) => {
+app.put('/api/meals/:mealId/tasks/:taskId/complete', (req, res) => {
   try {
     const taskId = req.params.id;
     const completionRequest = req.body;
@@ -646,7 +646,7 @@ app.put('/task/:id/complete', (req, res) => {
 });
 
 // GET /current-task/:timeline_id - Get active task details
-app.get('/current-task/:timeline_id', (req, res) => {
+app.get('/api/meals/:mealId/current-task', (req, res) => {
   try {
     const mealId = req.params.timeline_id;
     const meal = meals.get(mealId);
