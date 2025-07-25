@@ -27,14 +27,12 @@ export interface Task {
   status: 'pending' | 'active' | 'completed';
 }
 
-// Mock recipe parser and timeline generator
 const generateMockTimeline = (recipes: Recipe[], diners: number, targetTime: string): Task[] => {
   const tasks: Task[] = [];
   const targetDate = new Date(targetTime);
-  let currentTime = new Date(targetDate.getTime() - 120 * 60000); // Start 2 hours before
+  let currentTime = new Date(targetDate.getTime() - 120 * 60000);
   
   recipes.forEach((recipe, recipeIndex) => {
-    // Mock tasks for each recipe
     const recipeTasks = [
       {
         task_id: `prep-${recipeIndex}`,
@@ -63,7 +61,7 @@ const generateMockTimeline = (recipes: Recipe[], diners: number, targetTime: str
     ];
     
     tasks.push(...recipeTasks);
-    currentTime = new Date(currentTime.getTime() + 60 * 60000); // Space recipes 1 hour apart
+    currentTime = new Date(currentTime.getTime() + 60 * 60000);
   });
   
   return tasks;
@@ -78,7 +76,6 @@ export const localStorageAPI = {
   }): Promise<Meal> {
     const mealId = `meal-${Date.now()}`;
     
-    // Mock recipe parsing
     const recipes: Recipe[] = data.recipes.map((url, index) => ({
       recipe_id: `recipe-${index}`,
       url,
@@ -127,6 +124,25 @@ export const localStorageAPI = {
     const task = meal.timeline.find(t => t.task_id === taskId);
     if (task) {
       task.status = 'completed';
+      localStorage.setItem(`meal-${mealId}`, JSON.stringify(meal));
+    }
+  },
+
+  async delayTask(mealId: string, taskId: string, delayMinutes: number): Promise<void> {
+    const meal = await this.getMeal(mealId);
+    if (!meal?.timeline) return;
+    
+    const task = meal.timeline.find(t => t.task_id === taskId);
+    if (task) {
+      const startTime = new Date(task.start_time);
+      const endTime = new Date(task.end_time);
+      
+      startTime.setMinutes(startTime.getMinutes() + delayMinutes);
+      endTime.setMinutes(endTime.getMinutes() + delayMinutes);
+      
+      task.start_time = startTime.toISOString();
+      task.end_time = endTime.toISOString();
+      
       localStorage.setItem(`meal-${mealId}`, JSON.stringify(meal));
     }
   }
